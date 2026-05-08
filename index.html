@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Hype Vault | Premium Portfolio</title>
+    <title>The Quirky Deck | Portfolio Project</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --glass: rgba(255, 255, 255, 0.15);
-            --border: rgba(255, 255, 255, 0.3);
-            --primary-accent: #6366f1;
+            --card-width: 320px;
+            --card-height: 448px;
+            --bg-dark: #0f172a;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18,189 +18,340 @@
         body {
             font-family: 'Outfit', sans-serif;
             min-height: 100vh;
+            background-color: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: radial-gradient(circle at 20% 20%, #1e293b 0%, transparent 40%),
+                        radial-gradient(circle at 80% 80%, #334155 0%, transparent 40%),
+                        #0f172a;
+        }
+
+        /* --- THE PLAYING CARD --- */
+        .card-wrapper {
+            perspective: 1000px;
+            margin-bottom: 3rem;
+        }
+
+        .playing-card {
+            width: var(--card-width);
+            height: var(--card-height);
+            background: #ffffff;
+            border-radius: 18px;
+            position: relative;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 0 0 8px #f1f5f9;
             display: flex;
             align-items: center;
             justify-content: center;
-            /* Animated Mesh Gradient Background */
-            background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
-            background-size: 400% 400%;
-            animation: meshMove 15s ease infinite;
+            padding: 40px;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
             overflow: hidden;
         }
 
-        @keyframes meshMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .playing-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
         }
 
-        /* --- THE VAULT CARD --- */
-        .vault-card {
-            position: relative;
-            width: 380px;
-            height: 600px; /* Fixed tall vertical height */
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--border);
-            border-radius: 40px;
-            display: flex;
-            flex-direction: column;
-            padding: 40px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            text-align: center;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 10;
-        }
-
-        .vault-card:hover {
-            transform: scale(1.03) translateY(-10px);
-            border-color: var(--primary-accent);
-        }
-
-        /* Decorative "Floating" Elements */
-        .vault-card::before {
-            content: '';
+        .corner-symbol {
             position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, rgba(99,102,241,0.4) 0%, transparent 70%);
-            z-index: -1;
-        }
-
-        /* --- UI ELEMENTS --- */
-        .header-tag {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: #94a3b8;
-            margin-bottom: 20px;
-        }
-
-        .emoji-box {
-            font-size: 5rem;
-            margin: 20px 0;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
-            transition: transform 0.5s ease;
-        }
-
-        .text-container {
-            flex-grow: 1;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 10px;
+            font-size: 1.5rem;
+            transition: all 0.4s ease;
         }
 
-        #compliment-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            color: #f8fafc;
-            line-height: 1.2;
-            font-style: italic;
-            opacity: 1;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
+        .top-right { top: 15px; right: 15px; }
+        .bottom-left { bottom: 15px; left: 15px; transform: rotate(180deg); }
 
-        .refresh-btn {
-            background: #f8fafc;
-            color: #0f172a;
-            border: none;
-            padding: 20px;
-            border-radius: 25px;
-            font-weight: 800;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        .content-area {
+            text-align: center;
+            z-index: 2;
             width: 100%;
-            margin-top: 20px;
         }
 
-        .refresh-btn:hover {
-            background: var(--primary-accent);
-            color: white;
-            transform: translateY(-2px);
+        .main-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.15rem;
+            color: #1e293b;
+            line-height: 1.5;
+            transition: opacity 0.3s ease;
         }
 
-        /* Animation States */
-        .fade-out { opacity: 0; transform: translateY(-20px); }
-        .fade-in { opacity: 1; transform: translateY(0); }
+        .punchline {
+            display: block;
+            margin-top: 1.5rem;
+            color: #6366f1;
+            font-weight: 800;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .punchline.reveal {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* --- CONTROLS --- */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+        }
+
+        .btn-compliment { background: #6366f1; color: white; box-shadow: 0 8px 15px rgba(99, 102, 241, 0.3); }
+        .btn-joke { background: #f43f5e; color: white; box-shadow: 0 8px 15px rgba(244, 63, 94, 0.3); }
+
+        .btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        .btn:active { transform: translateY(0); }
 
     </style>
 </head>
 <body>
 
-    <div class="vault-card">
-        <p class="header-tag">Reflections</p>
-        
-        <div class="emoji-box" id="emoji-display">✨</div>
-        
-        <div class="text-container">
-            <p id="compliment-text">The world is simply better with you in it.</p>
+    <div class="card-wrapper">
+        <div class="playing-card" id="card">
+            <div class="corner-symbol top-right" id="tr-symbol">✨</div>
+            <div class="corner-symbol bottom-left" id="bl-symbol">✨</div>
+            
+            <div class="content-area">
+                <p id="display-text" class="main-text">Deal a card to find your vibe.</p>
+                <span id="punchline-text" class="punchline"></span>
+            </div>
         </div>
+    </div>
 
-        <button class="refresh-btn" onclick="generateNew()">Reveal Your Truth</button>
+    <div class="button-group">
+        <button class="btn btn-compliment" onclick="handleCompliment()">Quirky Compliment</button>
+        <button class="btn btn-joke" onclick="handleJoke()">Dad Joke</button>
     </div>
 
     <script>
-        const library = [
-            { text: "Your soul is a masterpiece in progress.", emoji: "🎨" },
-            { text: "You have the quiet confidence of a library.", emoji: "📚" },
-            { text: "Your brain belongs in a museum of wonders.", emoji: "🏛️" },
-            { text: "You’re the human equivalent of a Sunday morning.", emoji: "☀️" },
-            { text: "I bet you're the person people text when they have good news.", emoji: "📱" },
-            { text: "You're like a high-five for the soul.", emoji: "✋" },
-            { text: "If you were a color, you'd be something they haven't named yet.", emoji: "🌈" },
-            { text: "You’re the 'main character' everyone actually likes.", emoji: "🎭" },
-            { text: "Your presence is a natural stress-reliever.", emoji: "🌿" },
-            { text: "You're the only person I'd trust with my secret snack stash.", emoji: "🍪" },
-            { text: "You're like a perfectly timed joke—pure gold.", emoji: "📀" },
-            { text: "I’d follow your lead into a dark cave without a flashlight.", emoji: "🔦" },
-            { text: "You have 'Top Tier Human' energy.", emoji: "👑" },
-            { text: "You’re the reason people still believe in kindness.", emoji: "🤝" },
-            { text: "Your vibe is 100% organic and locally sourced.", emoji: "🥑" }
-            // Logic below expands this to 100 items dynamically for the portfolio
+        const compliments = [
+            "You’re the human version of a 'Buy One Get One Free' deal.",
+            "I bet you’re the reason the 'close' button on elevators actually works for you.",
+            "Your brain is so fascinating I’d listen to you talk about drywall for hours.",
+            "If you were a vegetable, you’d be a 'cute-cumber.'",
+            "You’re like the 'skip ad' button on YouTube—a total lifesaver.",
+            "I'd pick you for my team in a zombie apocalypse. No questions asked.",
+            "You have the kind of confidence that makes other people feel confident too.",
+            "You’re the 'cool side of the pillow' in person form.",
+            "I bet you fold your laundry the same day you wash it. Legendary behavior.",
+            "You’re more fun than bubble wrap.",
+            "If you were a dog, you’d definitely be Best in Show.",
+            "You’re the only person I’d trust with my phone’s unlock code.",
+            "You have a 'good hair day' soul.",
+            "You’re the kind of person who finds the perfect parking spot on the first try.",
+            "You’re like a high-speed internet connection in a world of dial-up.",
+            "Your taste in music/movies/life is dangerously good.",
+            "I would trust you to hold my taco while I tie my shoe.",
+            "You’re the person I’d want next to me if we got stuck in an elevator.",
+            "You’re like a phone charger that actually stays in the port.",
+            "You have the moral compass of a Golden Retriever.",
+            "You’re the type of person who makes 'holding the door' look cool.",
+            "If we were on a sinking ship, I’d share my door with you. Titanic style.",
+            "You’re the human equivalent of finding $20 in your winter coat pocket.",
+            "Your energy is like a perfectly brewed cup of coffee.",
+            "You’re a 10/10 taco—perfectly seasoned and always a good idea.",
+            "I bet you never have to flip your USB drive three times to plug it in.",
+            "You’re like the 'New Tab' page: full of endless possibilities.",
+            "You make being yourself look like a professional sport.",
+            "You’re the kind of person who remembers people’s birthdays without Facebook.",
+            "I bet babies stop crying the moment you walk into the room.",
+            "You’re like a perfectly timed pun—completely unexpected and brilliant.",
+            "If you were a candle, your scent would be 'Fresh Morning and Success.'",
+            "You’re the MVP of every social gathering you attend.",
+            "You’re like a rare Pokémon: hard to find and worth the effort.",
+            "I bet you’ve never accidentally 'Reply All'ed to a company email.",
+            "You’re the reason people still believe in the 'Nice' category of humans.",
+            "You have the vibe of someone who knows exactly where the best pizza is.",
+            "You’re like a software update that actually fixes things without adding bugs.",
+            "You’re the kind of person I’d share my fries with. That’s a big deal.",
+            "Your smile is proof that the best things in life aren’t things.",
+            "You’re like a fresh pair of socks on a cold morning.",
+            "I bet you’re the person people hope to sit next to at a dinner party.",
+            "You have a 'low battery' warning for negativity.",
+            "You’re the human version of a perfectly ripe avocado.",
+            "You’re like a 5-star review for existence.",
+            "I bet you could make a paper bag look stylish.",
+            "You’re the kind of friend people write songs about.",
+            "You’re like a perfectly toasted bagel—golden and wonderful.",
+            "You’re the 'unlimited data' of friends.",
+            "If life were a video game, you’d be the hidden easter egg everyone looks for.",
+            "You’re the 'Ctrl+Z' for my bad moods.",
+            "Your laugh is more contagious than a yawn.",
+            "You’re like a secret menu item: only the cool people know you.",
+            "I bet you always remember to bring your reusable bags to the store.",
+            "You have the grace of a gazelle, but cooler.",
+            "You’re the kind of person who actually reads the Terms and Conditions.",
+            "You’re like a fresh coat of paint—you make everything look new.",
+            "You’re the human equivalent of a long weekend.",
+            "I bet you’ve never had a 'forgotten password' crisis.",
+            "You’re like a gold star on a difficult homework assignment.",
+            "You make even boring tasks feel like a montage in a movie.",
+            "You’re the 'add to cart' button for happiness.",
+            "I bet you find the end of the tape roll instantly.",
+            "You’re like a perfectly executed high-five.",
+            "You’re the 'no traffic' route on Google Maps.",
+            "You have the vibe of someone who always has a spare phone charger.",
+            "You’re like a surprise extra nugget in a 10-piece box.",
+            "You’re the 'verified' checkmark of humans.",
+            "I bet you could win a staring contest with a cat.",
+            "You’re like a warm blanket on a rainy day.",
+            "You’re the human version of a 'low-key' masterpiece.",
+            "You’re the kind of person who knows the best shortcut.",
+            "You have the patience of a saint, but a much better wardrobe.",
+            "You’re like a perfectly centered photo.",
+            "I bet you never have to shake the remote to make it work.",
+            "You’re the 'dark mode' of people: sleek and easy on the eyes.",
+            "You’re like a perfectly ripe watermelon—refreshing and sweet.",
+            "You have a brain like a library—well-organized and full of gems.",
+            "You’re the 'free Wi-Fi' of social circles.",
+            "I bet you always pick the best lane at the grocery store.",
+            "You’re like a perfectly balanced equation.",
+            "You’re the 'five stars' in a world of 'three stars.'",
+            "You have the kind of laugh that should be a ringtone.",
+            "You’re like a freshly charged laptop—ready for anything.",
+            "I bet you’ve never accidentally walked into a screen door.",
+            "You’re the 'undo' button for the world's awkwardness.",
+            "You’re like a perfectly seasoned cast-iron skillet.",
+            "You have the curiosity of a toddler but the wisdom of a wizard.",
+            "You’re the human version of a 'hidden gem' restaurant.",
+            "I bet you’re the person who always gets the joke first.",
+            "You’re like a perfectly aligned set of dominos.",
+            "You’re the 'gold medal' of neighbors.",
+            "You have a spirit that’s impossible to 'unsubscribe' from.",
+            "You’re like a perfectly poured cup of tea.",
+            "I bet you never have to Google 'how to boil an egg.'",
+            "You’re the 'fast lane' on the highway of life.",
+            "You’re like a perfectly sharpened pencil.",
+            "You have the vibe of someone who always knows the Wi-Fi password.",
+            "You’re the 'all-access pass' to a good time.",
+            "You’re remarkably you, and that’s the best thing about you."
         ];
 
-        // Fill up to 100 unique items
-        while(library.length < 100) {
-            library.push({
-                text: `You are remarkably ${["resilient", "witty", "charming", "sharp", "original"][Math.floor(Math.random()*5)]} and the universe knows it.`,
-                emoji: "🌠"
+        const jokes = [
+            { s: "Why don't scientists trust atoms?", p: "Because they make up everything!" },
+            { s: "What do you call a fake noodle?", p: "An impasta!" },
+            { s: "Why did the gym close down?", p: "It just didn't work out!" },
+            { s: "What do you call a bear with no teeth?", p: "A gummy bear!" },
+            { s: "How do you organize a space party?", p: "You planet!" },
+            { s: "Why did the scarecrow win an award?", p: "He was outstanding in his field!" },
+            { s: "I'm on a seafood diet.", p: "I see food and I eat it!" },
+            { s: "What's orange and sounds like a parrot?", p: "A carrot!" },
+            { s: "What did the ocean say to the beach?", p: "Nothing, it just waved." },
+            { s: "Why can't Elsa have a balloon?", p: "Because she'll 'Let it Go'!" },
+            { s: "What do you call a sleeping dinosaur?", p: "A dino-snore!" },
+            { s: "Why did the golfer bring two pairs of pants?", p: "In case he got a hole in one!" },
+            { s: "What did the zero say to the eight?", p: "Nice belt!" },
+            { s: "Why do cows wear bells?", p: "Because their horns don't work!" },
+            { s: "What do you call a pile of kittens?", p: "A meow-ntain!" },
+            { s: "Why did the banana go to the doctor?", p: "He wasn't peeling well!" },
+            { s: "What do you call a dog that does magic?", p: "A labracadabrador!" },
+            { s: "Why did the math book look sad?", p: "Because it had too many problems!" },
+            { s: "What do you call an alligator in a vest?", p: "An investigator!" },
+            { s: "Why don't skeletons fight each other?", p: "They don't have the guts!" },
+            { s: "What kind of music do planets listen to?", p: "Nep-tunes!" },
+            { s: "Why did the tomato turn red?", p: "It saw the salad dressing!" },
+            { s: "What do you call a factory that makes okay products?", p: "A satisfactory!" },
+            { s: "How does a penguin build its house?", p: "Igloos it together!" },
+            { s: "Why are elevator jokes so good?", p: "They work on so many levels!" },
+            { s: "What did one plate say to the other?", p: "Dinner is on me!" },
+            { s: "What do you call a snowman with a six pack?", p: "An abdominal snowman!" },
+            { s: "Why did the cookie go to the hospital?", p: "Because it felt crumb-y!" },
+            { s: "What do you call a fish with no eyes?", p: "A fsh!" },
+            { s: "Why did the bird go to the hospital?", p: "To get a tweet-ment!" },
+            { s: "How do you make a tissue dance?", p: "You put a little boogey in it!" },
+            { s: "Why was the belt arrested?", p: "For holding up a pair of pants!" },
+            { s: "What do you call a bee that can’t make up its mind?", p: "A maybe!" },
+            { s: "Why did the stadium get hot?", p: "All the fans left!" },
+            { s: "What kind of shoes do ninjas wear?", p: "Sneakers!" },
+            { s: "Why did the grape stop in the middle of the road?", p: "Because he ran out of juice!" },
+            { s: "What do you call a cow with no legs?", p: "Ground beef!" },
+            { s: "Why did the bicycle fall over?", p: "Because it was two-tired!" },
+            { s: "How does a vampire start a letter?", p: "Tomb it may concern..." },
+            { s: "What do you call a man with a shovel?", p: "Doug!" },
+            { s: "What do you call a man without a shovel?", p: "Douglas!" },
+            { s: "Why can't you hear a pterodactyl go to the bathroom?", p: "Because the P is silent!" },
+            { s: "What did the buffalo say to his son when he left for college?", p: "Bison!" },
+            { s: "Why was the computer cold?", p: "It left its Windows open!" },
+            { s: "What do you call a can opener that doesn’t work?", p: "A can’t opener!" },
+            { s: "What do you call a fly with no wings?", p: "A walk!" },
+            { s: "Why did the robber jump in the shower?", p: "He wanted to make a clean getaway!" },
+            { s: "How do you tell if a vampire has a cold?", p: "By his deep coffin!" },
+            { s: "What kind of tree fits in your hand?", p: "A palm tree!" },
+            { s: "Why did the student eat his homework?", p: "The teacher said it was a piece of cake!" }
+        ];
+
+        const colors = ['#f43f5e', '#6366f1', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4'];
+        const symbols = ['⭐', '🔥', '💎', '🚀', '🍀', '✨', '⚡', '🌈', '🎭', '🍕', '🛸'];
+
+        const displayEl = document.getElementById('display-text');
+        const punchlineEl = document.getElementById('punchline-text');
+        const trEl = document.getElementById('tr-symbol');
+        const blEl = document.getElementById('bl-symbol');
+
+        function updateCardStyle() {
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+            
+            [trEl, blEl].forEach(el => {
+                el.style.backgroundColor = color + '22';
+                el.style.color = color;
+                el.innerText = symbol;
             });
         }
 
-        const textEl = document.getElementById('compliment-text');
-        const emojiEl = document.getElementById('emoji-display');
-        let currentIdx = -1;
-
-        function generateNew() {
-            let nextIdx;
-            do {
-                nextIdx = Math.floor(Math.random() * library.length);
-            } while (nextIdx === currentIdx);
-
-            currentIdx = nextIdx;
-            const data = library[nextIdx];
-
-            // Start Transition
-            textEl.classList.add('fade-out');
+        function handleCompliment() {
+            punchlineEl.classList.remove('reveal');
+            const compliment = compliments[Math.floor(Math.random() * compliments.length)];
             
+            displayEl.style.opacity = 0;
             setTimeout(() => {
-                textEl.innerText = data.text;
-                emojiEl.innerText = data.emoji;
-                
-                textEl.classList.remove('fade-out');
-                textEl.classList.add('fade-in');
-                
-                // Pop effect for emoji
-                emojiEl.style.transform = 'scale(1.2) rotate(10deg)';
-                setTimeout(() => emojiEl.style.transform = 'scale(1) rotate(0deg)', 200);
+                displayEl.innerText = compliment;
+                punchlineEl.innerText = "";
+                displayEl.style.opacity = 1;
+                updateCardStyle();
             }, 300);
         }
+
+        function handleJoke() {
+            const joke = jokes[Math.floor(Math.random() * jokes.length)];
+            punchlineEl.classList.remove('reveal');
+            
+            displayEl.style.opacity = 0;
+            setTimeout(() => {
+                displayEl.innerText = joke.s;
+                punchlineEl.innerText = joke.p;
+                displayEl.style.opacity = 1;
+                updateCardStyle();
+
+                // Comedic timing delay (2 seconds)
+                setTimeout(() => {
+                    punchlineEl.classList.add('reveal');
+                }, 2000);
+            }, 300);
+        }
+
+        updateCardStyle();
     </script>
 </body>
 </html>
