@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Quirky Deck | Portfolio Project</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -16,19 +17,37 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            min-height: 100vh;
-            background-color: var(--bg-dark);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            background: radial-gradient(circle at 20% 20%, #1e293b 0%, transparent 40%),
-                        radial-gradient(circle at 80% 80%, #334155 0%, transparent 40%),
-                        #0f172a;
-        }
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #0f172a;
+    position: relative;
+}
 
+/* The Animated Mesh Blobs */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: 
+                radial-gradient(circle at 20% 30%, #6366f1 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, #f43f5e 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, #8b5cf6 0%, transparent 30%);
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: meshRotate 20s linear infinite;
+            z-index: -1;
+    }
+
+        @keyframes meshRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+    }
         /* --- THE PLAYING CARD --- */
         .card-wrapper {
             perspective: 1000px;
